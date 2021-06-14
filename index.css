@@ -1,0 +1,22 @@
+body {
+  background-color: #282828;
+}
+.ui {
+  position: fixed;
+  bottom: 0;
+}
+
+.inputBlock {
+  position: absolute;
+  height: 20px;
+  background-color: #8ec07c;
+  color: #282828;
+}
+.termBlock {
+  background-color: #ebdbb2;
+  height: 20px;
+}
+
+.visualization {
+  position: absolute;
+}

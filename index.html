@@ -1,81 +1,13 @@
 <!-- vim:set sw=2 -->
 <html>
  <head>
-  <!--<script src="./index.js"></script>-->
-  <script>
-
-
-
-   let tb = null
-   let render = null
-
-   document.onreadystatechange = function() {
-    tb = document.querySelector("textarea")
-    render = document.querySelector("#main")
-   }
-
-
-   let events = []
-   let tapterm = 180
-
-   function epic(noupdatejson) {
-    const data = events.map(([a, b, c]) => ([a, b, (c - events[0][2])]))
-    render.innerHTML = visualize(toTuples(data))
-
-
-
-    document.getElementById("last").scrollIntoView()
-    if (!noupdatejson) {
-     document.getElementById("copypasta").value = JSON.stringify(events)
-    }
-
-   }
-
-   document.addEventListener('keydown', (e) => {events.push([true,  e.key, Date.now()]); epic()})
-   document.addEventListener('keyup',   (e) => {events.push([false, e.key, Date.now()]); epic()})
-
-   function oninputchange() {
-    events = JSON.parse(document.getElementById("copypasta").value)
-    tapterm = document.getElementById("tapterm").value
-    epic(true)
-   }
-
-   function toTuples(data) {
-    let tuples = []
-    let pending = {}
-    let levels = new Array(30).map(_ => false)
-
-    for (let [down, key, time] of data) {
-     if (down) {
-      let level = levels.findIndex(x => !x)
-      pending[key] = [level, time]
-      levels[level] = true
-     } else {
-      if (!pending[key]) continue
-      tuples.push([key, ...(pending[key]), time])
-      levels[pending[key][0]] = false
-     }
-    }
-    return tuples
-   }
-
-   function visualize(data) {
-    let s = "<div style='position: absolute'>"
-
-    for (let i = 0; i < data.length; i++) {
-     let [key, level, start, end] = data[i]
-
-     s += `<div id="${i === data.length - 1 ? "last" : ""}" style='position: absolute; width: ${(end - start) / 3}; top: ${level * 30}px; height: 20px; left: ${start / 3}px; background-color: #8ec07c; color: #282828'>${
-      (end - start) < (180) ? key : `<div style='background-color: #ebdbb2; height: 20px; width: calc(${tapterm}px / 3)'>${key}</div>`
-     }</div>`
-    }
-    return s + "</div>"
-   }
-  </script>
+  <script src="./index.js"></script>
+  <link rel="stylesheet" href="./index.css">
  </head>
- <body style="background-color: #282828;">
-  <div style="position: fixed; bottom: 0"> 
+ <body>
+  <div class="ui"> 
    <input type="number" id="tapterm" value="180"></input>
+   <input type="number" id="scale" value="3"></input>
    <input type="text" id="copypasta" ></input>
    <button onclick="oninputchange()">apply</button>
   </div>
